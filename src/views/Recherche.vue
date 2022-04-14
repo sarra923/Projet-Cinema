@@ -8,61 +8,64 @@
     </form>
     <h2>Resultats de la recherche</h2>
     <table>
-      <tr v-for="unFilm in films" v-bind:key="unFilm.key">
-        <td v-if="unFilm.poster_path!=null" width="400px">
+      <center>
+    <tr v-for="unFilm in films" v-bind:key="unFilm.key">
+     <td v-if="unFilm.poster_path!=null" width="400px">
         <td>{{unFilm.title}}</td>
-          <img v-bind:src="'http://image.tmdb.org/t/p/w500' + unFilm.poster_path"></td>
+        <img v-bind:src="'http://image.tmdb.org/t/p/w500' + unFilm.poster_path"></td>
         <td>
-         <button class="button" v-on:click="voirDetails(unFilm)">Détails</button>
+          <button class="button" v-on:click="voirDetails(unFilm)">Détails</button>
         </td>
       </tr>
+      </center>
     </table>
   </div>
 </template>
 
 <script>
-  import axios from 'axios'
-  
-  export default {
-    name: 'Recherche ',
-    data() {
-      return {
-        baseUrl: 'https://api.themoviedb.org/3/search/movie' ,
-        films: [],
+import axios from 'axios'
 
-        uneRecherche: '',
-        api_key: '3f2e73f99471592447bae321c22cd045'
-      }
+export default {
+  name: 'Recherche ',
+  data() {
+    return {
+      baseUrl: 'https://api.themoviedb.org/3/search/movie' ,
+      films: [],
+      uneRecherche: '',
+      api_key: '3f2e73f99471592447bae321c22cd045'
+    }
+  },
+  methods: {
+    async recherche(){
+      // const response = await axios.get(this.baseUrl + '/search.json?title=${this.query}');
+      const response = await axios.get(this.baseUrl + '?api_key=' + this.api_key + '&query=' + this.uneRecherche);
+      this.films = await response.data.results;
     },
-    methods: {
-      async recherche(){
-        // const response = await axios.get(this.baseUrl + '/search.json?title=${this.query}');
-        const response = await axios.get(this.baseUrl + '?api_key=' + this.api_key + '&query=' + this.uneRecherche);
-        this.films = await response.data.results;
-      },
-
-      voirDetails(film) {
-        this.$router.push({
-          path: 'details', query: {
-            id: film.id,
-            titre: film.title
-          }
-        });
-      }
+    voirDetails(film) {
+      this.$router.push({
+        path: 'details', query: {
+          id: film.id,
+          titre: film.title
+        }
+      });
     }
   }
+}
 </script>
+
+
+
+
+
 
 
 <style lang ="scss">
 
-h2 {
 
+h2 {
   padding: 20px;
   font-size: 19px;
 }
-
-
 .button {
   width: 100%;
   padding: 15px 100px;
@@ -78,11 +81,7 @@ h2 {
   text-decoration: none;
   display: inline-block;
   border: 1px solid;
-
-
-
 }
-
 .button1{
   padding: 15px 100px;
   margin: 10px 4px;
@@ -97,11 +96,7 @@ h2 {
   text-decoration: none;
   display: inline-block;
   border: 1px solid;
-
-
-
 }
-
 .input-group {
   display: flex;
   flex-direction: column;
@@ -109,7 +104,6 @@ h2 {
   align-items: center;
   padding: 16px;
 }
-
 input{
   display: inline-block;
   appearance: none;
@@ -128,11 +122,8 @@ input{
     text-transform: capitalize;
     text-align: center;
     width: 390px;
-  
+
   }
 }
 
-
-
-        
 </style>
